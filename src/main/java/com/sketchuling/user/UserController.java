@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
 
+    // 테스트용 주석 코드 추가
     @GetMapping("/sign-in")
     public String signIn() {
         return "user/sign-in";
