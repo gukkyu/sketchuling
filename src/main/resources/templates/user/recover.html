@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/signLayout}">
+<th:block layout:fragment="content">
+    <section class="contents d-flex justify-content-center align-items-center h-100">
+        <div id="recover-box" class="d-flex justify-content-center align-items-center">
+            <div class="w-50">
+                <div class="display-4 mb-3 d-flex justify-content-center">Sketchuling</div>
+                <div class="text-primary mb-4 d-flex justify-content-center">계정 복구</div>
+                <div class="mb-5">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <div class="small font-weight-bold">아이디 복구</div>
+                        <div id="nameEmailWarning" class="small text-danger">이름 또는 이메일 확인!</div>
+                    </div>
+                    <input id="idName" type="text" class="form-control mb-3" placeholder="가입했던 계정 이름">
+                    <input id="idEmail" type="password" class="form-control mb-3" placeholder="가입했던 계정 이메일 주소">
+                    <button id="idRecover" type="button" class="btn btn-primary form-control">아이디 찾기</button>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <div class="small font-weight-bold">비밀번호 재설정</div>
+                        <div id="idEmailWarning" class="small text-danger d-none">아이디 또는 이메일 확인!</div>
+                        <div id="emailSent" class="small text-success">인증코드가 발송되었습니다.</div>
+                        <div id="codeError" class="small text-danger d-none">인증코드 확인!</div>
+                    </div>
+                    <input id="passwordId" type="text" class="form-control mb-3" placeholder="계정 이름">
+                    <div class="d-flex">
+                        <input id="passwordEmail" type="password" class="form-control mb-3" placeholder="계정 이메일 주소">
+                        <button type="button" id="sendCode" class="form-control col-4 btn btn-success">코드발송</button>
+                    </div>
+                    <div class="d-flex">
+                        <input id="verificationCode" type="password" class="form-control mb-3" placeholder="인증코드 6자리">
+                        <button type="button" id="codeCheck" class="form-control col-4 btn btn-success">인증하기</button>
+                    </div>
+                    <input id="password" type="password" class="form-control mb-3" placeholder="새로운 비밀번호">
+                    <button id="passwordRecover" type="button" class="btn btn-primary form-control">비밀번호 재설정</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>

@@ -1,0 +1,29 @@
+body{
+    background-image : url("/img/background.jpg");
+    background-repeat : no-repeat;
+    background-size : cover;
+}
+html, body, .section{
+    height: 100%;
+}
+#sign-in-box{
+    height: 65%;
+    width: 40%;
+    background-color: white;
+    border-radius: 2.5%;
+}
+#kakao{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: salmon;
+}
+a:hover{
+    text-decoration: none;
+}
+#sign-up-box, #recover-box{
+    height: 90%;
+    width: 40%;
+    background-color: white;
+    border-radius: 2%;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/signLayout}">
+<th:block layout:fragment="content">
+    <section class="contents d-flex justify-content-center align-items-center h-100">
+        <div id="sign-up-box" class="d-flex justify-content-center align-items-center">
+            <div class="w-50">
+                <div class="display-4 mb-3 d-flex justify-content-center">Sketchuling</div>
+                <div class="text-primary mb-4 d-flex justify-content-center">회원가입</div>
+                <form method="post" action="/user/sign-up" id="signUpForm">
+                    <div class="form-group">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <div class="small font-weight-bold mr-3">아이디</div>
+                            <div id="idCheckLength" class="small text-danger d-none">아이디를 4자 이상 입력해주세요.</div>
+                            <div id="idCheckDuplicated" class="small text-danger d-none">이미 사용중인 아이디입니다.</div>
+                            <div id="idCheckOk" class="small text-success d-none">사용 가능한 아이디입니다.</div>
+                        </div>
+                        <div class="d-flex">
+                            <input name="id" type="text" class="form-control" placeholder="아이디를 입력하세요.">
+                            <button type="button" id="idCheck" class="form-control col-4 btn btn-success">중복확인</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <div class="small font-weight-bold mr-3">비밀번호</div>
+                            <div id="passwordError" class="small text-danger d-none mt-1">비밀번호를 확인해주세요.</div>
+                            <div id="passwordLength" class="small text-danger d-none mt-1">비밀번호를 입력해주세요.</div>
+                        </div>
+                        <input name="password" type="password" class="form-control" placeholder="비밀번호를 입력해주세요.">
+                    </div>
+
+                    <div class="form-group">
+                        <input name="passwordCheck" type="password" class="form-control" placeholder="비밀번호 확인">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <div class="small font-weight-bold mr-3">이름</div>
+                            <span id="nameCheck" class="small text-danger d-none">이름을 입력해주세요.</span>
+                        </div>
+                        <input name="name" type="text" class="form-control" placeholder="이름을 입력해주세요.">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="small font-weight-bold mb-1 mr-3">이메일</div>
+                            <span id="emailCheck" class="small text-danger d-none mb-1">이메일을 입력해주세요.</span>
+                            <span id="emailFormCheck" class="small text-danger d-none mb-1">이메일 양식을 확인해주세요.</span>
+                        </div>
+                        <input name="email" type="text" class="form-control" placeholder="이메일을 입력해주세요.">
+                    </div>
+
+                    <button type="submit" class="submitBtn mt-4 btn btn-primary w-100">회원가입</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</th:block>

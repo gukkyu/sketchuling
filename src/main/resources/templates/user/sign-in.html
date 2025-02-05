@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/signLayout}">
+<th:block layout:fragment="content">
+    <section class="contents d-flex justify-content-center align-items-center h-100">
+        <div id="sign-in-box" class="d-flex justify-content-center align-items-center">
+            <div class="text-center w-50">
+                <div class="display-4">Sketchuling</div>
+                <input class="form-control mt-5 mb-3" type="text" placeholder="아이디">
+                <input class="form-control mb-3" type="text" placeholder="비밀번호">
+                <button class="btn btn-success form-control mb-3">로그인</button>
+                <div class="d-flex align-items-center justify-content-center mt-2 mb-4"><span class="text-success mr-2">또는</span>카카오 계정으로 로그인 <div id="kakao" class="ml-4"></div></div>
+                <div class="mb-2">계정이 없으신가요? <a href="/user/sign-up" class="ml-4">회원가입</a></div>
+                <div class="mb-2">아이디, 비밀번호 찾기 <a href="/user/recover" class="ml-4">계정 복구</a></div>
+            </div>
+        </div>
+    </section>
+</th:block>

@@ -19,4 +19,14 @@ public class UserController {
         return "user/sign-in";
     }
 
+    @GetMapping("/sign-up")
+    public String signUp() {
+        return "user/sign-up";
+    }
+
+    @GetMapping("/recover")
+    public String recover() {
+        return "user/recover";
+    }
+
 }

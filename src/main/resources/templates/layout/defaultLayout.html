@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html
-        lang="ko"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<th:block th:replace="fragments/config :: configFragment"></th:block>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <!-- 여기에 Head 내용 -->
+</head>
 <body>
 <div id="wrap" class="d-flex">
     <th:block th:replace="fragments/header :: headerFragment"></th:block>
-    <th:block layout:fragment="content"></th:block>
     <th:block th:replace="fragments/section :: sectionFragment"></th:block>
+    <th:block layout:fragment="content"></th:block> <!-- 여기에 실제 콘텐츠가 삽입됩니다 -->
+
 </div>
 </body>
 </html>
