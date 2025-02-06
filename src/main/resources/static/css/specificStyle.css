@@ -6,7 +6,7 @@ html, body, #wrap{
 }
 header{
     width: 100%;
-    background-color: aqua;
+    background-color: black;
 }
 .section{
     width: 95%;
@@ -16,18 +16,17 @@ header{
 }
 .contents{
     width: 90%;
-    height: 98.5%;
-    background-color: green;
     border-top-left-radius: 15px;
 }
 .w-5{
     width: 5%;
 }
 .w-20{
-    width: 20%;
+    width: 10%;
 }
 .w-90{
-    width: 90%;
+    border-radius: 20px;
+    width: 98%;
 }
 .w-80{
     width: 80%;
@@ -49,7 +48,15 @@ header{
     border-radius: 5px;
 }
 #todolistBox{
-    background-color: white;
+    background-color: salmon;
+    overflow: auto;
+    scrollbar-width: none;
+}
+#todolistBox::-webkit-scrollbar{
+    display:none;
+}
+.h-90{
+    height: 90%;
 }
 .category-color{
     width: 35px;
@@ -72,17 +79,17 @@ header{
     background-color: blue;
 }
 #calenderBox{
-    height: 10%;
+    height: 5%;
 }
 #calender{
-    width: 20%;
+    width: 100%;
     background-color: white;
 }
 #dayBox{
-    height: 90%
+    height: 95%
 }
 .date{
-    width: 10%;
+    width: 100%;
     background-color: deeppink;
 }
 .specificDate{
@@ -97,5 +104,9 @@ header{
     height: 95%;
     width: 20%;
     background-color: blue;
+    border-radius: 15px;
+}
+#addBtn{
+    width: 98%;
     border-radius: 15px;
 }

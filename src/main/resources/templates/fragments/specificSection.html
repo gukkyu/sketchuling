@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<div class="section d-flex" th:fragment="sectionFragment">
+    <div class="w-20 h-100">
+        <div id="calenderBox" class="d-flex align-items-center">
+            <div id="calender">
+                <div>
+                    <div class="d-flex justify-content-center">< 주간 캘린더</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dayBox" class="d-flex justify-content-between">
+            <div class="date">
+                <div class="specificDate d-flex align-items-center justify-content-center">
+                    <div class="w-100">
+                        <div class="d-flex justify-content-center">
+                            월
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            12/31
+                        </div>
+                    </div>
+                </div>
+                <div class="dateBar d-flex justify-content-center align-items-center">
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block layout:fragment="content"></th:block>
+</div>
+</html>

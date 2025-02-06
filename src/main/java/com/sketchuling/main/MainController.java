@@ -12,4 +12,9 @@ public class MainController {
     public String main(){
         return "main/main";
     }
+
+    @GetMapping("/specific")
+    public String specific(){
+        return "main/specific";
+    }
 }
