@@ -1,0 +1,47 @@
+body{
+    background-color:black;
+}
+html, body, #wrap{
+    height: 100%;
+}
+header{
+    width: 100%;
+    background-color: aqua;
+}
+.section{
+    width: 95%;
+    height: 98.5%;
+    background-color: brown;
+    border-top-left-radius: 15px;
+}
+.contents{
+    width: 90%;
+    height: 98.5%;
+    background-color: green;
+    border-top-left-radius: 15px;
+}
+.w-5{
+    width: 5%;
+}
+.w-20{
+    width: 20%;
+}
+.w-80{
+    width: 80%;
+}
+.h-98{
+    height: 98.5%;
+}
+.circle{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    background-color: white;
+    border-radius: 50%;
+}
+.line{
+    width: 100%;
+    height: 1%;
+    background-color: white;
+    border-radius: 5px;
+}

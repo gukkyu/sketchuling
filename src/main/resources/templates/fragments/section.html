@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html
         lang="ko"
-        xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="sectionFragment">
-    <header>
-
-    </header>
-</th:block>
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<div class="section d-flex align-items-end" th:fragment="sectionFragment">
+    <div class="w-20 h-98">
+        <div>
+            aaaa
+        </div>
+    </div>
+    <th:block layout:fragment="content"></th:block>
+</div>
 </html>
