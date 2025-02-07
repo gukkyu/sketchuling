@@ -29,4 +29,9 @@ public class UserBO {
         );
         return user == null? false : true;
     }
+
+    public UserEntity getUserByLoginIdAndPassword(String loginId, String password){
+        String hashedPassword = EncryptUtils.encrypt(password);
+        return userRepository.findByLoginIdAndPassword(loginId, hashedPassword);
+    }
 }
