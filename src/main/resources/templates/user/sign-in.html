@@ -11,9 +11,13 @@
                 <form method="post" action="/user/sign-in" id="signInForm">
                     <input name="id" class="form-control mt-5 mb-3" type="text" placeholder="아이디">
                     <input name="password" class="form-control mb-3" type="password" placeholder="비밀번호">
-                    <button type="submit" id="loginBtn" class="btn btn-success form-control mb-3">로그인</button>
+                    <button type="submit" id="loginBtn" class="btn btn-primary form-control mb-3">로그인</button>
                 </form>
-                <div class="d-flex align-items-center justify-content-center mt-2 mb-4"><span class="text-success mr-2">또는</span>카카오 계정으로 로그인 <div id="kakao" class="ml-4"></div></div>
+                <div class="d-flex align-items-center justify-content-center mt-2 mb-4"><span class="text-success mr-2">또는</span>
+                    소셜 계정으로 로그인
+                    <a th:href="|https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientId}&state=STATE_STRING&redirect_uri=${naverRedirectUri}|"><img src="/img/btnG.png" class="social ml-4"></img></a>
+                    <a th:href="|https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUri}|"><img src="/img/btnK.png" class="social ml-4"></img></a>
+                </div>
                 <div class="mb-2">계정이 없으신가요? <a href="/user/sign-up" class="ml-4">회원가입</a></div>
                 <div class="mb-2">아이디, 비밀번호 찾기 <a href="/user/recover" class="ml-4">계정 복구</a></div>
             </div>

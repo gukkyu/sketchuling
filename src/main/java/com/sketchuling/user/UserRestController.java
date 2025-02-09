@@ -1,5 +1,6 @@
 package com.sketchuling.user;
 
+import com.sketchuling.common.NaverAPI;
 import com.sketchuling.user.bo.UserBO;
 import com.sketchuling.user.entity.UserEntity;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class UserRestController {
 
     private final UserBO userBO;
+    private final NaverAPI naverAPI;
 
     @GetMapping("/is-duplicate-id")
     public Map<String, Object> isDuplicateId(@RequestParam("loginId") String loginId) {
@@ -73,6 +75,5 @@ public class UserRestController {
         }
         return result;
     }
-
-
+    
 }

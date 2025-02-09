@@ -12,26 +12,28 @@
                 <div class="mb-5">
                     <div class="d-flex align-items-center justify-content-between mb-1">
                         <div class="small font-weight-bold">아이디 복구</div>
-                        <div id="nameEmailWarning" class="small text-danger">이름 또는 이메일 확인!</div>
+                        <div id="nameEmailWarning" class="d-none small text-danger">이름 또는 이메일 확인!</div>
                     </div>
                     <input id="idName" type="text" class="form-control mb-3" placeholder="가입했던 계정 이름">
-                    <input id="idEmail" type="password" class="form-control mb-3" placeholder="가입했던 계정 이메일 주소">
+                    <input id="idEmail" type="text" class="form-control mb-3" placeholder="가입했던 계정 이메일 주소">
                     <button id="idRecover" type="button" class="btn btn-primary form-control">아이디 찾기</button>
                 </div>
                 <div>
                     <div class="d-flex align-items-center justify-content-between mb-1">
                         <div class="small font-weight-bold">비밀번호 재설정</div>
                         <div id="idEmailWarning" class="small text-danger d-none">아이디 또는 이메일 확인!</div>
-                        <div id="emailSent" class="small text-success">인증코드가 발송되었습니다.</div>
+                        <div id="emailWarning" class="small text-danger d-none">인증코드를 먼저 발급하세요.</div>
+                        <div id="emailSent" class="small text-success d-none">인증코드가 발송되었습니다.</div>
+                        <div id="codeSuccess" class="small text-primary d-none">코드를 확인했습니다.</div>
                         <div id="codeError" class="small text-danger d-none">인증코드 확인!</div>
                     </div>
-                    <input id="passwordId" type="text" class="form-control mb-3" placeholder="계정 이름">
+                    <input id="passwordId" type="text" class="form-control mb-3" placeholder="아이디">
                     <div class="d-flex">
-                        <input id="passwordEmail" type="password" class="form-control mb-3" placeholder="계정 이메일 주소">
+                        <input id="passwordEmail" type="text" class="form-control mb-3" placeholder="계정 이메일 주소">
                         <button type="button" id="sendCode" class="form-control col-4 btn btn-success">코드발송</button>
                     </div>
                     <div class="d-flex">
-                        <input id="verificationCode" type="password" class="form-control mb-3" placeholder="인증코드 6자리">
+                        <input id="verificationCode" type="text" class="form-control mb-3" placeholder="인증코드 6자리">
                         <button type="button" id="codeCheck" class="form-control col-4 btn btn-success">인증하기</button>
                     </div>
                     <input id="password" type="password" class="form-control mb-3" placeholder="새로운 비밀번호">
@@ -40,4 +42,132 @@
             </div>
         </div>
     </section>
+    <script>
+        $(function(){
+            // 요소들의 가시성을 변경하는 함수
+            function toggleVisibility(elements, hideClass, showClass) {
+                elements.forEach(function(element) {
+                    $(element).removeClass(hideClass).addClass(showClass);
+                });
+            }
+
+            // 요소를 숨기는 함수
+            function hideElements(elements) {
+                elements.forEach(function(element) {
+                    $(element).addClass("d-none");
+                });
+            }
+
+            // 아이디 회복
+            $("#idRecover").on("click", function(){
+                let name = $("#idName").val();
+                let email = $("#idEmail").val();
+
+                $.ajax({
+                    type:"post",
+                    url:"/user/recover/id",
+                    data:{"name":name, "email":email},
+                    success:function(data){
+                        if(data.code == 404){
+                            $("#idEmailWarning").removeClass("d-none");
+                        } else{
+                            hideElements(["#idEmailWarning"]);
+                            alert("메일이 전송되었습니다. 이메일을 확인해주세요.");
+                            location.href="/user/sign-in";
+                        }
+                    },
+                    error:function(e){
+                        alert("확인실패!");
+                    }
+                });
+            });
+
+            // 인증 코드 전송
+            $("#sendCode").on("click", function(){
+                let loginId = $("#passwordId").val();
+                let email = $("#passwordEmail").val();
+
+                $.ajax({
+                    type:"post",
+                    url:"/user/recover/password",
+                    data:{"loginId":loginId, "email":email},
+                    success:function(data){
+                        if(data.code == 404){
+                            hideElements(["#emailSent"]);
+                            $("#idEmailWarning").removeClass("d-none");
+                        } else{
+                            hideElements(["#idEmailWarning"]);
+                            $("#emailSent").removeClass("d-none");
+                        }
+                    },
+                    error:function(e){
+                        alert("확인실패!");
+                    }
+                });
+            });
+
+            $("#codeCheck").on("click", function(){
+                let loginId = $("#passwordId").val();
+                let email = $("#passwordEmail").val();
+                let code = $("#verificationCode").val();
+
+                if($("#emailSent").hasClass("d-none")){
+                    $("#emailWarning").removeClass("d-none");
+                    return;
+                }
+
+                $.ajax({
+                    type:"post",
+                    url:"/user/recover/code",
+                    data:{"loginId":loginId, "email":email, "code":code},
+                    success:function(data){
+                        // 이메일 관련 요소는 항상 숨기지 않도록
+                        if(data.code == 404){
+                            hideElements(["#emailWarning", "#idEmailWarning"]);
+                            $("#codeError").removeClass("d-none");
+                        } else if(data.code == 405){
+                            alert(data.error_message);  // 인증 코드가 만료된 경우 처리
+                            // 이메일 전송된 상태인 #emailSent는 숨기지 않음
+                        } else{
+                            hideElements(["#emailWarning", "#idEmailWarning", "#codeError"]);
+                            $("#codeSuccess").removeClass("d-none");
+                            // 이메일 전송된 상태인 #emailSent는 숨기기
+                            $("#emailSent").addClass("d-none");
+                        }
+                    },
+                    error:function(e){
+                        alert("확인실패!");
+                    }
+                });
+            });
+
+            // 비밀번호 회복
+            $("#passwordRecover").on("click", function(){
+                let loginId = $("#passwordId").val();
+                let password = $("#password").val();
+
+                if($("#codeSuccess").hasClass("d-none")){
+                    $("#emailWarning").addClass("d-none");
+                    return;
+                }
+
+                $.ajax({
+                    type:"post",
+                    url:"/user/recover/password/success",
+                    data:{"loginId":loginId, "password":password},
+                    success:function(data){
+                        if(data.code == 404){
+                            alert("비밀번호 재설정 실패!");
+                        } else{
+                            alert("비밀번호가 재설정되었습니다.");
+                            location.href="/user/sign-in";
+                        }
+                    },
+                    error:function(e){
+                        alert("확인실패!");
+                    }
+                });
+            });
+        });
+    </script>
 </th:block>

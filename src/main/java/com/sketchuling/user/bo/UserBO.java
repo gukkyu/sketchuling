@@ -6,7 +6,7 @@ import com.sketchuling.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -34,4 +34,13 @@ public class UserBO {
         String hashedPassword = EncryptUtils.encrypt(password);
         return userRepository.findByLoginIdAndPassword(loginId, hashedPassword);
     }
+
+    public UserEntity getUserByNameAndEmail(String name, String email){
+        return userRepository.findByNameAndEmail(name, email);
+    }
+
+    public UserEntity getUserByIdAndEmail(String loginId, String email){
+        return userRepository.findByLoginIdAndEmail(loginId, email);
+    }
+
 }
