@@ -19,14 +19,12 @@
         </div>
 
         <div id="dayBox" class="d-flex justify-content-between">
-            <a href="/main/specific" class="date">
+            <a href="/main/specific" class="date monday">
                 <div class="specificDate d-flex align-items-center justify-content-center">
                     <div class="w-100">
+                        <div class="d-flex justify-content-center">월</div>
                         <div class="d-flex justify-content-center">
-                            월
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            12/31
+                            <span class="date-value" th:text="${weekDates.Monday}"></span>
                         </div>
                     </div>
                 </div>
@@ -34,14 +32,12 @@
                     <div class="bar"></div>
                 </div>
             </a>
-            <a href="/main/specific" class="date">
+            <a href="/main/specific" class="date tuesday">
                 <div class="specificDate d-flex align-items-center justify-content-center">
                     <div class="w-100">
+                        <div class="d-flex justify-content-center">화</div>
                         <div class="d-flex justify-content-center">
-                            화
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            12/31
+                            <span class="date-value" th:text="${weekDates.Tuesday}"></span>
                         </div>
                     </div>
                 </div>
@@ -49,14 +45,12 @@
                     <div class="bar"></div>
                 </div>
             </a>
-            <a href="/main/specific"  class="date">
+            <a href="/main/specific" class="date wednesday">
                 <div class="specificDate d-flex align-items-center justify-content-center">
                     <div class="w-100">
+                        <div class="d-flex justify-content-center">수</div>
                         <div class="d-flex justify-content-center">
-                            수
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            12/31
+                            <span class="date-value" th:text="${weekDates.Wednesday}"></span>
                         </div>
                     </div>
                 </div>
@@ -64,14 +58,12 @@
                     <div class="bar"></div>
                 </div>
             </a>
-            <a href="/main/specific"  class="date">
+            <a href="/main/specific" class="date thursday">
                 <div class="specificDate d-flex align-items-center justify-content-center">
                     <div class="w-100">
+                        <div class="d-flex justify-content-center">목</div>
                         <div class="d-flex justify-content-center">
-                            목
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            12/31
+                            <span class="date-value" th:text="${weekDates.Thursday}"></span>
                         </div>
                     </div>
                 </div>
@@ -79,14 +71,12 @@
                     <div class="bar"></div>
                 </div>
             </a>
-            <a href="/main/specific"  class="date">
+            <a href="/main/specific" class="date friday">
                 <div class="specificDate d-flex align-items-center justify-content-center">
                     <div class="w-100">
+                        <div class="d-flex justify-content-center">금</div>
                         <div class="d-flex justify-content-center">
-                            금
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            12/31
+                            <span class="date-value" th:text="${weekDates.Friday}"></span>
                         </div>
                     </div>
                 </div>
@@ -94,14 +84,12 @@
                     <div class="bar"></div>
                 </div>
             </a>
-            <a href="/main/specific"  class="date">
+            <a href="/main/specific" class="date saturday">
                 <div class="specificDate d-flex align-items-center justify-content-center">
                     <div class="w-100">
-                        <div class="d-flex justify-content-center text-primary">
-                            토
-                        </div>
+                        <div class="d-flex justify-content-center text-primary">토</div>
                         <div class="d-flex justify-content-center">
-                            12/31
+                            <span class="date-value" th:text="${weekDates.Saturday}"></span>
                         </div>
                     </div>
                 </div>
@@ -109,14 +97,12 @@
                     <div class="bar"></div>
                 </div>
             </a>
-            <a href="/main/specific"  class="date">
+            <a href="/main/specific" class="date sunday">
                 <div class="specificDate d-flex align-items-center justify-content-center">
                     <div class="w-100">
-                        <div class="d-flex justify-content-center text-danger">
-                            일
-                        </div>
+                        <div class="d-flex justify-content-center text-danger">일</div>
                         <div class="d-flex justify-content-center">
-                            12/31
+                            <span class="date-value" th:text="${weekDates.Sunday}"></span>
                         </div>
                     </div>
                 </div>
@@ -124,51 +110,95 @@
                     <div class="bar"></div>
                 </div>
             </a>
+
         </div>
     </section>
     <script>
-        let selectedDate = new Date();
+        let selectedDate = new Date(); // 현재 날짜
 
+        // 주간 범위를 가져오는 함수
         function getWeekRange(date) {
             let day = date.getDay();
-            let diff = date.getDate() - day + (day === 0 ? -6 : 1); // 월요일 기준 주 계산
-            let startOfWeek = new Date(date.setDate(diff));
-            let endOfWeek = new Date(date.setDate(startOfWeek.getDate() + 6));
+            let diff = date.getDate() - day + (day === 0 ? -6 : 1); // 월요일 기준으로 주 시작
+            let startOfWeek = new Date(date);
+            startOfWeek.setDate(diff);
+
+            let endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6); // 일요일이 주 마지막
+
             return { start: startOfWeek, end: endOfWeek };
         }
 
+        // 몇 번째 주인지 계산하는 함수
         function getMonthWeekNumber(date) {
             let firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-            let firstMonday = firstDayOfMonth;
+
+            // 첫 월요일 찾기
+            let firstMonday = new Date(firstDayOfMonth);
             while (firstMonday.getDay() !== 1) {
                 firstMonday.setDate(firstMonday.getDate() + 1);
             }
+
             let diff = date.getDate() - firstMonday.getDate();
             return Math.floor(diff / 7) + 1;
         }
 
+        // 화면에 주차를 표시하는 함수
         function updateWeekDisplay() {
+            let { start, end } = getWeekRange(selectedDate);
             let month = selectedDate.getMonth() + 1;
             let weekNumber = getMonthWeekNumber(selectedDate);
-            document.getElementById("weekLabel").innerText = `${month}월 ${weekNumber}주차`;
+
+            document.getElementById("weekLabel").innerText =
+                `${month}월 ${weekNumber}주차`;
         }
 
+        // 이전 주로 이동 버튼 이벤트
         document.getElementById("prevWeek").addEventListener("click", function() {
             selectedDate.setDate(selectedDate.getDate() - 7);
             updateWeekDisplay();
+            updateWeekDates();
         });
 
+        // 다음 주로 이동 버튼 이벤트
         document.getElementById("nextWeek").addEventListener("click", function() {
             selectedDate.setDate(selectedDate.getDate() + 7);
             updateWeekDisplay();
+            updateWeekDates();
         });
 
+        // 서버에서 새로운 주간 날짜를 가져와 화면 업데이트하는 함수
+        function updateWeekDates() {
+            let formattedDate = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식 변환
+
+            $.ajax({
+                url: "/main/updateDates",
+                type: "POST",
+                data: { "date": formattedDate },
+                success: function(data) {
+                    console.log("Updated week data:", data);
+
+                    // 각 요일의 날짜 업데이트 (Thymeleaf th:text를 사용한 요소를 직접 수정)
+                    document.querySelector(".monday .date-value").innerText = data.Monday;
+                    document.querySelector(".tuesday .date-value").innerText = data.Tuesday;
+                    document.querySelector(".wednesday .date-value").innerText = data.Wednesday;
+                    document.querySelector(".thursday .date-value").innerText = data.Thursday;
+                    document.querySelector(".friday .date-value").innerText = data.Friday;
+                    document.querySelector(".saturday .date-value").innerText = data.Saturday;
+                    document.querySelector(".sunday .date-value").innerText = data.Sunday;
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching week dates:", error);
+                }
+            });
+        }
+
+        // flatpickr 설정
         flatpickr("#weekLabel", {
             enableTime: false,
             dateFormat: "Y-m-d",
-
-            // ✅ '1월' 대신 '1월' 형태로 표시
             locale: {
+                firstDayOfWeek: 1,
                 months: {
                     shorthand: [...Array(12)].map((_, i) => `${i + 1}월`),
                     longhand: [...Array(12)].map((_, i) => `${i + 1}월`)
@@ -178,10 +208,14 @@
                 if (selectedDates.length > 0) {
                     selectedDate = new Date(selectedDates[0]);
                     updateWeekDisplay();
+                    updateWeekDates();
                 }
             }
         });
 
-        updateWeekDisplay(); // 초기 설정
+        // 초기 실행
+        updateWeekDisplay();
+        updateWeekDates();
+
     </script>
 </th:block>

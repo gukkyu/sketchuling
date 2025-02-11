@@ -7,7 +7,6 @@ import com.sketchuling.user.entity.UserEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @AllArgsConstructor
-public class socialLoginController {
+public class SocialLoginController {
 
     @Autowired
     private Environment env;
