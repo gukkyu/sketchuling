@@ -19,8 +19,6 @@ html, body, .section{
 .social{
     width: 35px;
     height: 35px;
-    border-radius: 50%;
-    background-color: salmon;
 }
 a:hover{
     text-decoration: none;

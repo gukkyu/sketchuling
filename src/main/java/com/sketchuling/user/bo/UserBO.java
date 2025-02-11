@@ -30,6 +30,17 @@ public class UserBO {
         return user == null? false : true;
     }
 
+    public void addGoogleUser(String name, String email, String loginAPI){
+        userRepository.save(
+                UserEntity.builder()
+                        .loginId(email)
+                        .name(name)
+                        .email(email)
+                        .loginAPI(loginAPI)
+                        .build()
+        );
+    }
+
     public UserEntity getUserByLoginIdAndPassword(String loginId, String password){
         String hashedPassword = EncryptUtils.encrypt(password);
         return userRepository.findByLoginIdAndPassword(loginId, hashedPassword);
@@ -37,6 +48,10 @@ public class UserBO {
 
     public UserEntity getUserByNameAndEmail(String name, String email){
         return userRepository.findByNameAndEmail(name, email);
+    }
+
+    public UserEntity getUserByNameAndEmailAndLoginAPI(String name, String email, String loginAPI){
+        return userRepository.findByNameAndEmailAndLoginAPI(name, email, loginAPI);
     }
 
     public UserEntity getUserByIdAndEmail(String loginId, String email){

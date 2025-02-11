@@ -32,6 +32,9 @@ public class UserEntity {
     @Column(name = "profileImagePath")
     private String profileImagePath;
 
+    @Column(name = "loginAPI")
+    private String loginAPI;
+
     @Column(name = "subscriptionDue")
     private Date subscriptionDue;
 

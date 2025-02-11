@@ -14,9 +14,8 @@
                     <button type="submit" id="loginBtn" class="btn btn-primary form-control mb-3">로그인</button>
                 </form>
                 <div class="d-flex align-items-center justify-content-center mt-2 mb-4"><span class="text-success mr-2">또는</span>
-                    소셜 계정으로 로그인
-                    <a th:href="|https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientId}&state=STATE_STRING&redirect_uri=${naverRedirectUri}|"><img src="/img/btnG.png" class="social ml-4"></img></a>
-                    <a th:href="|https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUri}|"><img src="/img/btnK.png" class="social ml-4"></img></a>
+                    구글 계정 로그인
+                    <a th:href="${requestUrl}"><img src="/img/btnGoogle.png" class="social ml-4"></img></a>
                 </div>
                 <div class="mb-2">계정이 없으신가요? <a href="/user/sign-up" class="ml-4">회원가입</a></div>
                 <div class="mb-2">아이디, 비밀번호 찾기 <a href="/user/recover" class="ml-4">계정 복구</a></div>
@@ -44,7 +43,7 @@
                 $.post(url, params)
                     .done(function(data){
                         if(data.code == 200){
-                            location.href = "/main/"
+                            location.href = "/main"
                         } else{
                             alert(data.error_message);
                         }

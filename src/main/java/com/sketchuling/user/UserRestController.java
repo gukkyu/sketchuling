@@ -1,13 +1,13 @@
 package com.sketchuling.user;
 
-import com.sketchuling.common.NaverAPI;
 import com.sketchuling.user.bo.UserBO;
 import com.sketchuling.user.entity.UserEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +17,9 @@ import java.util.Map;
 public class UserRestController {
 
     private final UserBO userBO;
-    private final NaverAPI naverAPI;
+
+    @Autowired
+    private Environment env;
 
     @GetMapping("/is-duplicate-id")
     public Map<String, Object> isDuplicateId(@RequestParam("loginId") String loginId) {
@@ -75,5 +77,5 @@ public class UserRestController {
         }
         return result;
     }
-    
+
 }

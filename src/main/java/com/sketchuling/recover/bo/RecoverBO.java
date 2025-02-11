@@ -33,10 +33,8 @@ public class RecoverBO {
     public String addRecover(int userId, String loginId, String email) {
         Random rand = new Random();
         StringBuilder code = new StringBuilder();
-        for(int i = 0; i < 6; i++){
-            int randomNumber = rand.nextInt(10);
-            code.append(randomNumber);
-        }
+        int randomNumber = rand.nextInt(1000000);
+        code.append(randomNumber);
         recoverRepository.save(
                 RecoverEntity.builder()
                         .userId(userId)

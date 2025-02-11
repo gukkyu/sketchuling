@@ -2,7 +2,7 @@ server:
   port: 80
 spring:
   config:
-    import: file:./src/main/resources/application-secret.yml
+    import: classpath:application-secret.yml
   thymeleaf:
     cache: false
   datasource:
