@@ -35,6 +35,9 @@ public class RecoverRestController {
         if (user == null) {
             result.put("code", 404);
             result.put("error_message", "이름과 이메일을 확인해주세요");
+        } else if (user.getLoginAPI() != null) {
+            result.put("code", 405);
+            result.put("error_message", "해당 계정은 소셜 로그인을 통해 로그인 해주세요.");
         } else {
             String id = user.getLoginId();
             recoverBO.idRecover(name, email, id);
@@ -53,6 +56,9 @@ public class RecoverRestController {
         if (user == null) {
             result.put("code", 404);
             result.put("error_message", "이름과 이메일을 확인해주세요");
+        } else if (user.getLoginAPI() != null) {
+            result.put("code", 405);
+            result.put("error_message", "해당 계정은 소셜 로그인을 통해 로그인 해주세요.");
         } else {
             int userId = user.getId();
             String code = recoverBO.addRecover(userId, loginId, email);

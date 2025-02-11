@@ -36,7 +36,7 @@ public class socialLoginController {
         // ✅ 환경 변수에서 Google Client 정보 가져오기
         String clientId = env.getProperty("google.client.id");
         String clientSecret = env.getProperty("google.client.pw");
-        String redirectUri = "http://localhost/user/sign-in/google";  // Google API 콘솔에 등록된 리디렉션 URI와 일치해야 함
+        String redirectUri = env.getProperty("google.redirectUri");  // Google API 콘솔에 등록된 리디렉션 URI와 일치해야 함
 
         // ✅ Google 토큰 요청 객체 생성
         Map<String, String> requestParams = new HashMap<>();

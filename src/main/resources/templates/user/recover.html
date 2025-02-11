@@ -70,6 +70,9 @@
                     success:function(data){
                         if(data.code == 404){
                             $("#idEmailWarning").removeClass("d-none");
+                        } else if(data.code == 405){
+                            alert(data.error_message);
+                            location.href = "/user/sign-in"
                         } else{
                             hideElements(["#idEmailWarning"]);
                             alert("메일이 전송되었습니다. 이메일을 확인해주세요.");
@@ -158,6 +161,9 @@
                     success:function(data){
                         if(data.code == 404){
                             alert("비밀번호 재설정 실패!");
+                        } else if(data.code == 405){
+                            alert(data.error_message);
+                            location.href = "/user/sign-in"
                         } else{
                             alert("비밀번호가 재설정되었습니다.");
                             location.href="/user/sign-in";

@@ -9,10 +9,10 @@
         <div id="calenderBox" class="d-flex justify-content-center align-items-center p-2">
             <div id="calender">
                 <div>
-                    <div class="d-flex justify-content-center mb-2">N월 N주차</div>
+                    <div id="weekLabel" class="d-flex justify-content-center mb-2">N월 N주차</div>
                     <div class="d-flex justify-content-between">
-                        <div>< 지난주</div>
-                        <div>다음주 ></div>
+                        <div id="prevWeek" class="nav-button">< 지난주</div>
+                        <div id="nextWeek" class="nav-button">다음주 ></div>
                     </div>
                 </div>
             </div>
@@ -126,4 +126,62 @@
             </a>
         </div>
     </section>
+    <script>
+        let selectedDate = new Date();
+
+        function getWeekRange(date) {
+            let day = date.getDay();
+            let diff = date.getDate() - day + (day === 0 ? -6 : 1); // 월요일 기준 주 계산
+            let startOfWeek = new Date(date.setDate(diff));
+            let endOfWeek = new Date(date.setDate(startOfWeek.getDate() + 6));
+            return { start: startOfWeek, end: endOfWeek };
+        }
+
+        function getMonthWeekNumber(date) {
+            let firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+            let firstMonday = firstDayOfMonth;
+            while (firstMonday.getDay() !== 1) {
+                firstMonday.setDate(firstMonday.getDate() + 1);
+            }
+            let diff = date.getDate() - firstMonday.getDate();
+            return Math.floor(diff / 7) + 1;
+        }
+
+        function updateWeekDisplay() {
+            let month = selectedDate.getMonth() + 1;
+            let weekNumber = getMonthWeekNumber(selectedDate);
+            document.getElementById("weekLabel").innerText = `${month}월 ${weekNumber}주차`;
+        }
+
+        document.getElementById("prevWeek").addEventListener("click", function() {
+            selectedDate.setDate(selectedDate.getDate() - 7);
+            updateWeekDisplay();
+        });
+
+        document.getElementById("nextWeek").addEventListener("click", function() {
+            selectedDate.setDate(selectedDate.getDate() + 7);
+            updateWeekDisplay();
+        });
+
+        flatpickr("#weekLabel", {
+            enableTime: false,
+            dateFormat: "Y-m-d",
+
+            // ✅ '1월' 대신 '1월' 형태로 표시
+            locale: {
+                months: {
+                    shorthand: [...Array(12)].map((_, i) => `${i + 1}월`),
+                    longhand: [...Array(12)].map((_, i) => `${i + 1}월`)
+                }
+            },
+            onChange: function(selectedDates) {
+                if (selectedDates.length > 0) {
+                    selectedDate = new Date(selectedDates[0]);
+                    updateWeekDisplay();
+                }
+            }
+        });
+
+        updateWeekDisplay(); // 초기 설정
+    </script>
 </th:block>
