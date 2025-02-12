@@ -66,4 +66,59 @@
 
     <div id="addBtn" class="d-flex justify-content-center align-items-center">일정 추가</div>
   </section>
+  <script>
+    function updateCalendarHref(newDate) {
+      let calendarBox = document.getElementById("calenderBox");
+      if (calendarBox) {
+        calendarBox.setAttribute("href", `/main?date=${newDate}`);
+      }
+    }
+
+    function updateWeekDates() {
+      let formattedDate = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식 변환
+
+      $.ajax({
+        url: "/main/updateDates",
+        type: "POST",
+        data: { "date": formattedDate },
+        success: function(data) {
+          console.log("Updated week data:", data);
+
+          let dayKeys = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+          dayKeys.forEach(day => {
+            let element = document.querySelector(`.${day.toLowerCase()} .date-value`);
+            let linkElement = document.querySelector(`.${day.toLowerCase()}`); // 해당 요일의 <a> 태그
+
+            if (element && data[day]) {
+              let rawDate = data[day]; // 서버에서 받은 YYYY-MM-DD 형식
+              element.setAttribute("data-raw-date", rawDate); // 원본 날짜 저장
+
+              let parts = rawDate.split("-"); // ["2024", "02", "12"]
+              let formattedDate = parts[1] + "/" + parts[2]; // "02/12"
+              element.textContent = formattedDate; // 화면에 MM/dd 형식으로 표시
+
+              // 📌 각 요일의 <a> 태그 href 업데이트
+              if (linkElement) {
+                linkElement.setAttribute("href", `/main/specific?date=${rawDate}`);
+              }
+            }
+          });
+
+          // 📌 주간 캘린더 링크 업데이트 → 주의 시작일(월요일) 기준
+          if (data["Monday"]) {
+            updateCalendarHref(data["Monday"]);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error("Error fetching week dates:", error);
+        }
+      });
+    }
+
+    // ✅ 페이지 로드 시 초기 실행
+    document.addEventListener("DOMContentLoaded", function() {
+      updateWeekDates();
+    });
+  </script>
 </th:block>

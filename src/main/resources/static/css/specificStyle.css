@@ -101,10 +101,6 @@ header{
 #calenderBox{
     height: 5%;
 }
-#calender{
-    width: 100%;
-    background-color: white;
-}
 #dayBox{
     height: 95%
 }

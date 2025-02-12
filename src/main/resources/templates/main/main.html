@@ -24,7 +24,7 @@
                     <div class="w-100">
                         <div class="d-flex justify-content-center">월</div>
                         <div class="d-flex justify-content-center">
-                            <span class="date-value" th:text="${weekDates.Monday}"></span>
+                            <span class="date-value" th:text="${weekDates.Monday}" th:data-raw-date="${weekDates.Monday}"></span>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     <div class="w-100">
                         <div class="d-flex justify-content-center">화</div>
                         <div class="d-flex justify-content-center">
-                            <span class="date-value" th:text="${weekDates.Tuesday}"></span>
+                            <span class="date-value" th:text="${weekDates.Tuesday}" th:data-raw-date="${weekDates.Tuesday}"></span>
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                     <div class="w-100">
                         <div class="d-flex justify-content-center">수</div>
                         <div class="d-flex justify-content-center">
-                            <span class="date-value" th:text="${weekDates.Wednesday}"></span>
+                            <span class="date-value" th:text="${weekDates.Wednesday}" th:data-raw-date="${weekDates.Wednesday}"></span>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                     <div class="w-100">
                         <div class="d-flex justify-content-center">목</div>
                         <div class="d-flex justify-content-center">
-                            <span class="date-value" th:text="${weekDates.Thursday}"></span>
+                            <span class="date-value" th:text="${weekDates.Thursday}" th:data-raw-date="${weekDates.Thursday}"></span>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     <div class="w-100">
                         <div class="d-flex justify-content-center">금</div>
                         <div class="d-flex justify-content-center">
-                            <span class="date-value" th:text="${weekDates.Friday}"></span>
+                            <span class="date-value" th:text="${weekDates.Friday}" th:data-raw-date="${weekDates.Friday}"></span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                     <div class="w-100">
                         <div class="d-flex justify-content-center text-primary">토</div>
                         <div class="d-flex justify-content-center">
-                            <span class="date-value" th:text="${weekDates.Saturday}"></span>
+                            <span class="date-value" th:text="${weekDates.Saturday}" th:data-raw-date="${weekDates.Saturday}"></span>
                         </div>
                     </div>
                 </div>
@@ -97,12 +97,12 @@
                     <div class="bar"></div>
                 </div>
             </a>
-            <a href="/main/specific" class="date sunday">
+            <a th:href="|/main/specific?date=${weekDates.Sunday}|" class="date sunday">
                 <div class="specificDate d-flex align-items-center justify-content-center">
                     <div class="w-100">
                         <div class="d-flex justify-content-center text-danger">일</div>
                         <div class="d-flex justify-content-center">
-                            <span class="date-value" th:text="${weekDates.Sunday}"></span>
+                            <span class="date-value" th:text="${weekDates.Sunday}" th:data-raw-date="${weekDates.Sunday}"></span>
                         </div>
                     </div>
                 </div>
@@ -114,7 +114,9 @@
         </div>
     </section>
     <script>
-        let selectedDate = new Date(); // 현재 날짜
+        // 📌 Thymeleaf에서 주간 시작 날짜(Monday)를 가져와 selectedDate로 설정
+        let initialDateStr = document.querySelector(".monday .date-value")?.getAttribute("data-raw-date") || new Date().toISOString().split('T')[0];
+        let selectedDate = new Date(initialDateStr); // 서버에서 받은 월요일 날짜를 기준으로 설정
 
         // 주간 범위를 가져오는 함수
         function getWeekRange(date) {
@@ -143,14 +145,13 @@
             return Math.floor(diff / 7) + 1;
         }
 
-        // 화면에 주차를 표시하는 함수
+        // 📌 화면에 주차를 표시하는 함수 (초기 설정 시 Thymeleaf 값 반영)
         function updateWeekDisplay() {
             let { start, end } = getWeekRange(selectedDate);
             let month = selectedDate.getMonth() + 1;
             let weekNumber = getMonthWeekNumber(selectedDate);
 
-            document.getElementById("weekLabel").innerText =
-                `${month}월 ${weekNumber}주차`;
+            document.getElementById("weekLabel").innerText = `${month}월 ${weekNumber}주차`;
         }
 
         // 이전 주로 이동 버튼 이벤트
@@ -178,14 +179,31 @@
                 success: function(data) {
                     console.log("Updated week data:", data);
 
-                    // 각 요일의 날짜 업데이트 (Thymeleaf th:text를 사용한 요소를 직접 수정)
-                    document.querySelector(".monday .date-value").innerText = data.Monday;
-                    document.querySelector(".tuesday .date-value").innerText = data.Tuesday;
-                    document.querySelector(".wednesday .date-value").innerText = data.Wednesday;
-                    document.querySelector(".thursday .date-value").innerText = data.Thursday;
-                    document.querySelector(".friday .date-value").innerText = data.Friday;
-                    document.querySelector(".saturday .date-value").innerText = data.Saturday;
-                    document.querySelector(".sunday .date-value").innerText = data.Sunday;
+                    let dayKeys = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+                    dayKeys.forEach(day => {
+                        let element = document.querySelector(`.${day.toLowerCase()} .date-value`);
+                        let linkElement = document.querySelector(`.${day.toLowerCase()}`); // 해당 요일의 <a> 태그
+
+                        if (element && data[day]) {
+                            let rawDate = data[day]; // 서버에서 받은 YYYY-MM-DD 형식
+                            element.setAttribute("data-raw-date", rawDate); // 원본 날짜 저장
+
+                            let parts = rawDate.split("-"); // ["2024", "02", "12"]
+                            let formattedDate = parts[1] + "/" + parts[2]; // "02/12"
+                            element.textContent = formattedDate; // 화면에 MM/dd 형식으로 표시
+
+                            // 📌 해당 요일의 <a> 태그의 href 속성 업데이트
+                            if (linkElement) {
+                                linkElement.setAttribute("href", `/main/specific?date=${rawDate}`);
+                            }
+                        }
+                    });
+
+                    // 📌 주간 캘린더 링크 업데이트 → 주의 시작일(월요일) 기준
+                    if (data["Monday"]) {
+                        updateCalendarHref(data["Monday"]);
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error("Error fetching week dates:", error);
@@ -193,7 +211,7 @@
             });
         }
 
-        // flatpickr 설정
+        // Flatpickr 설정
         flatpickr("#weekLabel", {
             enableTime: false,
             dateFormat: "Y-m-d",
@@ -213,9 +231,27 @@
             }
         });
 
-        // 초기 실행
-        updateWeekDisplay();
-        updateWeekDates();
+        // 📌 초기 실행: 기존 Thymeleaf 렌더링된 값을 MM/dd로 변환
+        function initializeDateValues() {
+            let dateElements = document.querySelectorAll(".date-value");
 
+            dateElements.forEach(function(element) {
+                let rawDate = element.textContent.trim(); // 초기 값 가져오기 (yyyy-MM-dd 형식)
+
+                if (rawDate && rawDate.includes("-")) {
+                    element.setAttribute("data-raw-date", rawDate); // 원본 날짜 저장
+
+                    let parts = rawDate.split("-"); // ["2024", "02", "12"]
+                    let formattedDate = parts[1] + "/" + parts[2]; // "02/12"
+
+                    element.textContent = formattedDate; // 화면에 MM/dd 형식으로 표시
+                }
+            });
+        }
+
+        // 📌 초기 실행: 서버에서 받은 날짜를 기반으로 설정
+        updateWeekDisplay();
+        initializeDateValues();
+        updateWeekDates();
     </script>
 </th:block>

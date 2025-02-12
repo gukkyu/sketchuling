@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/channel")
 public class ChannelController {
 
-    @GetMapping("/")
+    @GetMapping("")
     public String channel(){
         return "channel/channel";
     }
