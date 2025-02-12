@@ -1,14 +1,10 @@
 package com.sketchuling.main.bo;
 
-import com.sketchuling.main.domain.MainDTO;
-import com.sketchuling.subcategory.domain.Subcategory;
-import com.sketchuling.user.bo.UserBO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,17 +12,6 @@ import java.util.Map;
 @AllArgsConstructor
 @Service
 public class MainBO {
-
-    private final UserBO userBO;
-    private final ScheduleBO scheduleBO;
-    private final CategoryBO categoryBO;
-    private final SubcategoryBO subcategoryBO;
-    private final To_do_listBO to_do_listBO;
-
-    public MainDTO generateMainDTO(int userId) {
-        MainDTO mainDTO = new MainDTO();
-        return mainDTO;
-    }
 
     public Map<String, LocalDate> getDate(String dateStr){
         LocalDate date = (dateStr != null) ? LocalDate.parse(dateStr) : LocalDate.now();
