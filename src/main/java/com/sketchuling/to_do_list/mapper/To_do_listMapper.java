@@ -13,4 +13,9 @@ public interface To_do_listMapper {
             @Param("userId") int userId,
             @Param("start") String start,
             @Param("end") String end);
+
+    public List<Map<String, Object>> selectToDoListByCategoryIdAndCreatedAt(
+            @Param("categoryIdList") List<Integer> categoryIdList,
+            @Param("start") String start,
+            @Param("end") String end);
 }

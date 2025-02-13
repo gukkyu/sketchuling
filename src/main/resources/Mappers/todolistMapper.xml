@@ -4,7 +4,7 @@
 <mapper namespace="com.sketchuling.to_do_list.mapper.To_do_listMapper">
     <select id="selectToDoListByUserIdAndCreatedAt" resultType="map">
         SELECT
-            t.id AS toDoId,
+            t.id AS id,
             t.todolist,
             t.isChecked,
             t.createdAt AS toDoCreatedAt,
@@ -25,9 +25,39 @@
         WHERE
             c.userId = #{userId}
         AND
-            `createdAt` >= #{start}
+            t.`createdAt` >= #{start}
         AND
-            `createdAt` &lt; #{end}
+            t.`createdAt` &lt; #{end}
+    </select>
+    <select id="selectToDoListByCategoryIdAndCreatedAt" resultType="map">
+        SELECT
+            t.id AS id,
+            t.todolist,
+            t.isChecked,
+            t.createdAt AS toDoCreatedAt,
+            c.id AS categoryId,
+            c.name AS categoryName,
+            s.id AS subcategoryId,
+            s.name AS subcategoryName
+        FROM
+            to_do_list t
+        LEFT JOIN
+            subcategory s
+        ON
+            t.subcategoryId = s.id
+        LEFT JOIN
+            category c
+        ON
+            t.categoryId = c.id
+        WHERE
+            t.`createdAt` >= #{start}
+        AND
+            t.`createdAt` &lt; #{end}
+        AND c.id IN
+        <foreach item="id" collection="categoryIdList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
     </select>
 </mapper>
 

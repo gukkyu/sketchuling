@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @AllArgsConstructor
 @Controller
@@ -33,8 +31,8 @@ public class MainController {
 
         int userId = (int)session.getAttribute("userId");
 
-        Map<String, LocalDate> weekDateList = mainBO.getDate(dateStr);
-        model.addAttribute("weekDateList", weekDateList);
+        Map<String, LocalDate> weekDates = mainBO.getDate(dateStr);
+        model.addAttribute("weekDates", weekDates);
 
         Map<String, List<Schedule>> weekScheduleList = scheduleBO.getWeekScheduleList(userId, dateStr);
         model.addAttribute("weekScheduleList", weekScheduleList);
@@ -47,14 +45,24 @@ public class MainController {
     }
 
     @GetMapping("/specific")
-    public String specific(@RequestParam("date") LocalDate date, Model model) {
+    public String specific(@RequestParam("date") LocalDate date, Model model, HttpSession session) {
+        int userId = (int)session.getAttribute("userId");
+        String dateStr = date.toString();
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         String dayName = dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.KOREAN);
         String editedDay = dayName.substring(0, 1);
-
         model.addAttribute("date", date);
         model.addAttribute("dayName", editedDay);
+
+        List<Schedule> dayScheduleList = scheduleBO.getDayScheduleList(userId, dateStr);
+        model.addAttribute("dayScheduleList", dayScheduleList);
+
+        List<Map<String, Object>> dayTodolist = to_do_listBO.getToDoListByCategoryIdAndCreatedAt(dateStr, userId, dayScheduleList);
+        model.addAttribute("dayTodolist", dayTodolist);
+
+
         return "main/specific";
     }
 }

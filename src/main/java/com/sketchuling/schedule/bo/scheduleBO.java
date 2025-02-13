@@ -34,5 +34,8 @@ public class ScheduleBO {
         return week;
     }
 
+    public List<Schedule> getDayScheduleList(int userId, String dateStr) {
+        return scheduleMapper.selectScheduleListByUserIdAndDate(userId, dateStr);
+    }
 
 }

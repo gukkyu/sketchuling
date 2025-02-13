@@ -10,6 +10,7 @@
         FROM `schedule`
         WHERE
             `userId` = #{userId}
+        AND
             DATE(`startTime`) = #{date}
     </select>
 </mapper>
