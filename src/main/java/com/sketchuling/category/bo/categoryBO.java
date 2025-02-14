@@ -14,9 +14,13 @@ public class CategoryBO {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<CategoryEntity> getCategoryListByUserId(int userId) {
+    public List<Integer> getCategoryIdListByUserId(int userId) {
 
-        return categoryRepository.findAllByUserId(userId);
-
+        List<CategoryEntity> categoryEntityList = categoryRepository.findAllByUserId(userId);
+        List<Integer> categoryIdList = new ArrayList<>();
+        for (int i = 0; i < categoryEntityList.size(); i++) {
+            categoryIdList.add(categoryEntityList.get(i).getId());
+        }
+        return categoryIdList;
     }
 }

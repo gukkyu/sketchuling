@@ -9,6 +9,16 @@ import java.util.Map;
 
 @Mapper
 public interface To_do_listMapper {
+    public to_do_list selectTodolistByCategoryId(
+            @Param("categoryId") int categoryId,
+            @Param("start") String start,
+            @Param("end") String end);
+
+    public to_do_list selectTodolistBySubcategoryId(
+            @Param("subcategoryId") int subcategoryId,
+            @Param("start") String start,
+            @Param("end") String end);
+
     public List<Map<String, Object>> selectToDoListByUserIdAndCreatedAt(
             @Param("userId") int userId,
             @Param("start") String start,
