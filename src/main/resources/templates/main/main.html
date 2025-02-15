@@ -114,6 +114,33 @@
         </div>
     </section>
     <script>
+        $(function(){
+            $(".todoCheck").on("click", function() {
+                let id = $(this).data("id");
+                let isChecked = $(this).find('input[type="checkbox"]').prop("checked");
+
+                $.ajax({
+                    url: '/todolist/checking',
+                    type: 'PATCH',
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: {
+                        id: id,
+                        isChecked: !isChecked
+                    },
+                    success: function(data) {
+                        if(data.code === 200){
+                            location.reload();
+                        } else {
+                            alert('업데이트 실패: ' + data.result);
+                        }
+                    },
+                    error: function(e) {
+
+                    }
+                });
+            });
+        });
+
         // 📌 Thymeleaf에서 주간 시작 날짜(Monday)를 가져와 selectedDate로 설정
         let initialDateStr = document.querySelector(".monday .date-value")?.getAttribute("data-raw-date") || new Date().toISOString().split('T')[0];
         let selectedDate = new Date(initialDateStr); // 서버에서 받은 월요일 날짜를 기준으로 설정

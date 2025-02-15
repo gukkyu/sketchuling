@@ -2,38 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sketchuling.to_do_list.mapper.To_do_listMapper">
-    <select id="selectTodolistBySubcategoryId" parameterType="map">
-        SELECT
-            `id`,
-            `todolist`,
-            `isChecked`
-        FROM
-            `to_do_list`
-        WHERE
-            <![CDATA[
-            `createdAt` >= #{start}
-          AND
-            `createdAt` < #{end}
-            ]]>
-          AND `subcategoryId` = #{subcategoryId}
-    </select>
-
-    <select id="selectTodolistByCategoryId" parameterType="map">
-        SELECT
-            `id`,
-            `todolist`,
-            `isChecked`
-        FROM
-            `to_do_list`
-        WHERE
-            <![CDATA[
-            `createdAt` >= #{start}
-        AND
-            `createdAt` < #{end}
-            ]]>
-        AND `categoryId` = #{categoryId}
-        AND `subcategoryId` IS NULL
-    </select>
     <select id="selectToDoListByUserIdAndCreatedAt" resultType="map">
         SELECT
             t.id AS id,
@@ -41,6 +9,7 @@
             t.isChecked,
             c.id AS categoryId,
             c.name AS categoryName,
+            c.color AS categoryColor,
             s.id AS subcategoryId,
             s.name AS subcategoryName
         FROM
@@ -66,27 +35,32 @@
             t.createdAt AS toDoCreatedAt,
             c.id AS categoryId,
             c.name AS categoryName,
+            c.color AS categoryColor,
             s.id AS subcategoryId,
             s.name AS subcategoryName
         FROM
             to_do_list t
         LEFT JOIN
-            subcategory s
-        ON
-            t.subcategoryId = s.id
+            subcategory s ON t.subcategoryId = s.id
         LEFT JOIN
-            category c
-        ON
-            t.categoryId = c.id
+            category c ON t.categoryId = c.id
         WHERE
-            t.`createdAt` >= #{start}
-        AND
-            t.`createdAt` &lt; #{end}
+        <![CDATA[t.createdAt >= #{start} AND t.createdAt < #{end}]]>
+            <if test="categoryIdList != null and categoryIdList.size() > 0">
         AND c.id IN
-        <foreach item="id" collection="categoryIdList" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-
+            <foreach item="id" collection="categoryIdList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
     </select>
+    <update id="updateCheckByTodolistId" parameterType="map">
+        UPDATE
+            `to_do_list`
+        SET
+            `isChecked` = #{isChecked},
+            `updatedAt` = NOW()
+        WHERE
+            `id` = #{id}
+    </update>
 </mapper>
 

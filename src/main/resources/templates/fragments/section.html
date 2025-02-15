@@ -7,53 +7,50 @@
     <div class="w-20 h-98 d-flex justify-content-center">
         <div id="todolistBox" class="w-90 px-3">
             <div id="todoListWeek" class="font-weight-bold p-3 category">주간 할 일 목록</div>
-            <div class="my-2">
+            <div class="my-2" th:each="category : ${weekTodolist}">
+                <!-- 카테고리 -->
                 <div class="d-flex align-items-center category p-2">
-                    <div class="category-color mr-3"></div>
-                    <div>일</div>
+                    <div class="category-color mr-3"
+                         th:style="'background-color:' + ${category.color}"></div>
+                    <div th:text="${category.category}">일</div>
                 </div>
-                <div>
-                    <div class="d-flex my-3 py-3 subcategory">
-                        <div class="subcategory-color mr-3 mt-2"></div>
-                        <div>
-                            <div class="mb-4 mt-1">A 프로젝트</div>
-                            <div class="todolist">
-                                <div class="my-3 d-flex align-items-center"><input type="checkbox" class="mr-2"></input>AAA하기</div>
-                                <div class="my-3 d-flex align-items-center"><input type="checkbox" class="mr-2"></input>AAA하기</div>
-                                <div class="my-3 d-flex align-items-center"><input type="checkbox" class="mr-2"></input>AAA하기</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex my-3 py-3 subcategory">
-                        <div class="subcategory-color mr-3 mt-2"></div>
-                        <div>
-                            <div class="mb-4 mt-1">A 프로젝트 A 프로젝트 A 프로젝트 A 프로젝트</div>
-                            <div>
-                                <div class="todo my-3 d-flex align-items-center"><input type="checkbox" class="mr-2"></input>하기하기하기하기하기</div>
-                                <div class="my-3 d-flex align-items-center"><input type="checkbox" class="mr-2"></input>AAA하기</div>
-                                <div class="my-3 d-flex align-items-center"><input type="checkbox" class="mr-2"></input>AAA하기</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="my-2">
-                <div class="d-flex align-items-center category p-2">
-                    <div class="category-color mr-3"></div>
-                    <div>일</div>
-                </div>
+
+                <!-- 카테고리 내 직접 할 일 (체크박스 + 라벨) -->
                 <div class="todolist my-3 py-3 subcategory">
-                    <div class="my-3">AAA하기</div>
-                    <div class="my-3">AAA하기</div>
+                    <div class="my-3 d-flex align-items-center todoCheck" th:data-id="${task.id}" th:each="task : ${category.tasks}">
+                        <input class="mr-1 task-checkbox" type="checkbox"
+                               th:id="'task-' + ${task.id}"
+                               th:name="'task-' + ${task.id}"
+                               th:checked="${task.isChecked == true}" />
+
+                        <label th:for="'task-' + ${task.id}"
+                               th:text="${task.todolist}"
+                               class="ml-2 task-content"
+                               th:classappend="${task.isChecked == true} ? 'completed' : ''">
+                            AAA하기
+                        </label>
+                    </div>
                 </div>
-                <div class="d-flex my-3 py-3 subcategory">
+
+                <!-- 서브카테고리 -->
+                <div class="d-flex my-3 py-3 subcategory" th:each="subcategory : ${category.subcategories}">
                     <div class="subcategory-color mr-3 mt-2"></div>
                     <div>
-                        <div class="mb-4 mt-1">A 프로젝트</div>
+                        <div class="mb-4 mt-1" th:text="${subcategory.subcategory}">A 프로젝트</div>
                         <div class="todolist">
-                            <div class="my-3">AAA하기</div>
-                            <div class="my-3">AAA하기</div>
-                            <div class="my-3">AAA하기</div>
+                            <div class="my-3 d-flex align-items-center todoCheck" th:data-id="${subTask.id}" th:each="subTask : ${subcategory.tasks}">
+                                <input class="mr-2 task-checkbox" type="checkbox"
+                                       th:id="'subTask-' + ${subTask.id}"
+                                       th:name="'subTask-' + ${subTask.id}"
+                                       th:checked="${subTask.isChecked == true}" />
+
+                                <label th:for="'subTask-' + ${subTask.id}"
+                                       th:text="${subTask.todolist}"
+                                       class="ml-2 task-content"
+                                       th:classappend="${subTask.isChecked == true} ? 'completed' : ''">
+                                    AAA하기
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

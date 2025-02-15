@@ -82,7 +82,7 @@ header{
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: blueviolet;
+    background-color: #282828;
     margin-left: 35px;
 }
 .todolist{
@@ -147,4 +147,21 @@ a{
 a:hover{
     text-decoration: none;
     color: inherit;
+}
+.task-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.task-content {
+    font-size: 16px;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+/* 완료된 Task 스타일 */
+.completed {
+    text-decoration: line-through;
+    color: gray;
+    opacity: 0.6;
 }

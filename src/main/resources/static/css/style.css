@@ -52,6 +52,8 @@ header{
     width: 100%;
     aspect-ratio: 1 / 1;
     position: relative;
+    min-width: 20px; /* 너무 작아지지 않도록 최소 크기 설정 */
+    min-height: 20px;
     background-color: white;
     border-radius: 50%;
 }
@@ -65,7 +67,7 @@ header{
 }
 .category-color{
     width: 1.5vw; /* 뷰포트 너비의 5% */
-    height: 1.5w;
+    height: 1.5vw;
     min-width: 35px;
     min-height: 35px;
     border-radius: 50%;
@@ -77,7 +79,7 @@ header{
     min-width: 20px; /* 너무 작아지지 않도록 최소 크기 설정 */
     min-height: 20px;
     border-radius: 50%;
-    background-color: blueviolet;
+    background-color: #282828;
     margin-left: 35px;
 }
 .todolist{
@@ -135,6 +137,24 @@ a{
 a:hover{
     text-decoration: none;
     color: inherit;
+}
+
+.task-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.task-content {
+    font-size: 16px;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+/* 완료된 Task 스타일 */
+.completed {
+    text-decoration: line-through;
+    color: gray;
+    opacity: 0.6;
 }
 
 /* ✅ 말풍선 모양의 삼각형 숨기기 */
