@@ -1,8 +1,10 @@
 package com.sketchuling.to_do_list.bo;
 
 import com.sketchuling.category.bo.CategoryBO;
+import com.sketchuling.category.entity.CategoryEntity;
 import com.sketchuling.schedule.domain.Schedule;
 import com.sketchuling.subcategory.bo.SubcategoryBO;
+import com.sketchuling.subcategory.entity.SubcategoryEntity;
 import com.sketchuling.to_do_list.domain.to_do_list;
 import com.sketchuling.to_do_list.mapper.To_do_listMapper;
 import lombok.AllArgsConstructor;
@@ -21,38 +23,70 @@ public class To_do_listBO {
     private final CategoryBO categoryBO;
     private final SubcategoryBO subcategoryBO;
 
-    public List<List<to_do_list>> getCategoryTodoListByCategoryId(int userId, String dateStr){
-
+    public List<Map<String, Object>> getToDoListByUserIdAndCreatedAt(String dateStr, int userId) {
         LocalDate date = (dateStr != null) ? LocalDate.parse(dateStr) : LocalDate.now();
         LocalDate mon = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         String monday = mon.toString();
         LocalDate nextMon = mon.plusDays(7);
         String nextMonday = nextMon.toString();
 
-        List<List<to_do_list>> result = new ArrayList<>();
-        List<Integer> CategoryIdList = categoryBO.getCategoryIdListByUserId(userId);
-        for(int i = 0; i < CategoryIdList.size(); i++){
-            List<to_do_list> todoList = new ArrayList<>();
-            todoList.add(to_do_listMapper.selectTodolistByCategoryId(CategoryIdList.get(i), monday, nextMonday));
-            result.add(todoList);
-            List<Integer> subcategoryIdList = subcategoryBO.getSubcategoryIdListByCategoryId(CategoryIdList.get(i));
-            for(int j = 0; j < subcategoryIdList.size(); j++){
-                todoList = new ArrayList<>();
-                todoList.add(to_do_listMapper.selectTodolistByCategoryId(subcategoryIdList.get(j), monday, nextMonday));
-                result.add(todoList);
+        List<Map<String, Object>> rawList = to_do_listMapper.selectToDoListByUserIdAndCreatedAt(userId, monday, nextMonday);
+
+        Map<String, Map<String, Object>> categoryMap = new LinkedHashMap<>();
+
+        for (int i = 0; i < rawList.size(); i++) {
+            Map<String, Object> row = rawList.get(i);
+            String categoryName = (String) row.get("categoryName");
+            String subcategoryName = (String) row.get("subcategoryName");
+
+            if (!categoryMap.containsKey(categoryName)) {
+                Map<String, Object> category = new HashMap<>();
+                category.put("category", categoryName);
+                category.put("tasks", new ArrayList<Map<String, Object>>());
+                category.put("subcategories", new ArrayList<Map<String, Object>>());
+                categoryMap.put(categoryName, category);
+            }
+
+            Map<String, Object> category = categoryMap.get(categoryName);
+            List<Map<String, Object>> categoryTasks = (List<Map<String, Object>>) category.get("tasks");
+            if (subcategoryName == null) {
+                categoryTasks.add(extractTask(row));
+            }
+
+            List<Map<String, Object>> subcategories = (List<Map<String, Object>>) category.get("subcategories");
+
+            if (subcategoryName != null) {
+                Map<String, Object> subcategory = null;
+                for (int j = 0; j < subcategories.size(); j++) {
+                    if (subcategories.get(j).get("subcategory").equals(subcategoryName)) {
+                        subcategory = subcategories.get(j);
+                        break;
+                    }
+                }
+
+                if (subcategory == null) {
+                    subcategory = new HashMap<>();
+                    subcategory.put("subcategory", subcategoryName);
+                    subcategory.put("tasks", new ArrayList<Map<String, Object>>());
+                    subcategories.add(subcategory);
+                }
+
+                List<Map<String, Object>> subTasks = (List<Map<String, Object>>) subcategory.get("tasks");
+                subTasks.add(extractTask(row));
             }
         }
-        return result;
+
+        return new ArrayList<>(categoryMap.values());
     }
 
-    public List<Map<String, Object>> getToDoListByUserIdAndCreatedAt(String dateStr, int userId){
-        LocalDate date = (dateStr != null) ? LocalDate.parse(dateStr) : LocalDate.now();
-        LocalDate mon = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        String monday = mon.toString();
-        LocalDate nextMon = mon.plusDays(7);
-        String nextMonday = nextMon.toString();
-        return to_do_listMapper.selectToDoListByUserIdAndCreatedAt(userId, monday, nextMonday);
+    private Map<String, Object> extractTask(Map<String, Object> row) {
+        Map<String, Object> task = new HashMap<>();
+        task.put("id", row.get("id"));
+        task.put("todolist", row.get("todolist"));
+        task.put("isChecked", row.get("isChecked"));
+        return task;
     }
+
 
     public List<Map<String, Object>> getToDoListByCategoryIdAndCreatedAt(String dateStr, int userId, List<Schedule> dayScheduleList){
         LocalDate date = (dateStr != null) ? LocalDate.parse(dateStr) : LocalDate.now();
