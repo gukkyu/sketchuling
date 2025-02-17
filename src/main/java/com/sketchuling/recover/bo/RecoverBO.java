@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 @Service
@@ -58,5 +60,11 @@ public class RecoverBO {
         message.setFrom("gukkyu.comet@gmail.com");
 
         mailSender.send(message); // 메일 전송
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteCode(){
+        LocalDate date = LocalDate.now().minusDays(1);
+        recoverRepository.deleteByCreatedAt(date);
     }
 }
