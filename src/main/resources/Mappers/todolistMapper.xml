@@ -22,10 +22,12 @@
             c.userId = #{userId}
         AND
             <![CDATA[
-            t.createdAt >= #{start}
+            (t.createdAt >= #{start}
         AND
-            t.createdAt < #{end}
+            t.createdAt < #{end})
             ]]>
+        OR
+            t.isChecked = false
     </select>
     <select id="selectToDoListByCategoryIdAndCreatedAt" resultType="map">
         SELECT
@@ -45,7 +47,9 @@
         LEFT JOIN
             category c ON t.categoryId = c.id
         WHERE
-        <![CDATA[t.createdAt >= #{start} AND t.createdAt < #{end}]]>
+            t.isChecked = false
+        OR
+        <![CDATA[(t.createdAt >= #{start} AND t.createdAt < #{end})]]>
             <if test="categoryIdList != null and categoryIdList.size() > 0">
         AND c.id IN
             <foreach item="id" collection="categoryIdList" open="(" separator="," close=")">
