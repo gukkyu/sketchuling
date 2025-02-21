@@ -72,6 +72,9 @@ header{
 .h-90::-webkit-scrollbar{
     display:none;
 }
+.categoryList{
+    border-radius: 5px;
+}
 .category-color{
     width: 35px;
     height: 35px;

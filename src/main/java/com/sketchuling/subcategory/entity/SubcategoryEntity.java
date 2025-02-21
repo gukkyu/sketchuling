@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Getter
-@Table(name="category")
+@Table(name="subcategory")
 @Entity
 public class SubcategoryEntity {
     @Id

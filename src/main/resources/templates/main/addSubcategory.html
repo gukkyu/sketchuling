@@ -9,15 +9,22 @@
         <div class="addingCategory">
             <div class="m-2">
                 <div class="font-weight-bold mb-3">카테고리 선택</div>
-                <div class="mb-3">
-                    <div class="d-flex align-items-center">
-                        <div class="category-color"></div>
-                        <div class="ml-3">대충 이름</div>
-                        <button class="ml-5 btn btn-primary">선택</button>
+                <div class="mb-3 d-flex flex-wrap">
+                    <div class="categoryList d-flex align-items-center p-3 border mr-3 mb-3" th:each="category : ${categoryList}">
+                        <div class="category-color"
+                             th:style="'background-color:' + ${category.color}"></div>
+                        <div class="ml-3" th:text="${category.name}">대충 이름</div>
+                        <button th:data-id="${category.id}" class="subcategoryBtn ml-5 btn btn-primary">선택</button>
                     </div>
                 </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="font-weight-bold mr-3">선택된 카테고리</div>
+                    <div id="selectedCategory"></div>
+                    <div id="categoryName"></div>
+                </div>
                 <div class="font-weight-bold mb-3">서브 카테고리 이름</div>
-                <input type="text" class="form-control mb-3" placeholder="이름을 입력하세요.">
+                <input type="text" id="subcategoryName" class="form-control mb-3" placeholder="이름을 입력하세요.">
+                <button class="btn btn-primary mt-5 form-control d-none" id="addSubcategory">추가하기</button>
             </div>
         </div>
     </div>

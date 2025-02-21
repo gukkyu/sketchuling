@@ -1,6 +1,7 @@
 package com.sketchuling.main;
 
 import com.sketchuling.category.bo.CategoryBO;
+import com.sketchuling.category.entity.CategoryEntity;
 import com.sketchuling.main.bo.MainBO;
 import com.sketchuling.schedule.bo.ScheduleBO;
 import com.sketchuling.schedule.domain.Schedule;
@@ -78,16 +79,18 @@ public class MainController {
 
     @GetMapping("/specific/addCategory")
     public String specificAddCategory(HttpSession session, Model model) {
-        List<String> colorList = categoryBO.getCategoryColorListByUserId((int)session.getAttribute("userId"));
+        List<String> colorList = categoryBO.getCategoryColorListByUserId((int)session.getAttribute("userId"), (List<String>)session.getAttribute("categoryColorList"));
         model.addAttribute("colorList", colorList);
         return "main/addCategory";
     }
 
     @GetMapping("/specific/addSubcategory")
-    public String specificAddSubCategory(HttpSession session) {
-        if(categoryBO.getCategoryListByUserId((int)session.getAttribute("userId")).size() == 0) {
+    public String specificAddSubCategory(HttpSession session, Model model) {
+        List<CategoryEntity> categoryList = categoryBO.getCategoryListByUserId((int)session.getAttribute("userId"));
+        if(categoryList.isEmpty()) {
             return "redirect:/main/specific/addCategory";
         }
+        model.addAttribute("categoryList", categoryList);
         return "main/addSubcategory";
     }
 }

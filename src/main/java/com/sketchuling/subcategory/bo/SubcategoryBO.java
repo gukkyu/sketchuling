@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SubcategoryBO {
@@ -18,5 +20,20 @@ public class SubcategoryBO {
     public List<SubcategoryEntity> getSubcategoryListByCategoryId(int categoryId) {
 
         return subcategoryRepository.findAllByCategoryId(categoryId);
+    }
+
+    public Map<String, Object> addSubcategory(int id, String name) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            subcategoryRepository.save(SubcategoryEntity.builder()
+                    .categoryId(id)
+                    .name(name)
+                    .build());
+            result.put("code", 200);
+        } catch (Exception e) {
+            result.put("code", 404);
+        }
+
+        return result;
     }
 }

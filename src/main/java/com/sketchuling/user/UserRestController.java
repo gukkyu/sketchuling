@@ -1,5 +1,6 @@
 package com.sketchuling.user;
 
+import com.sketchuling.category.bo.CategoryBO;
 import com.sketchuling.user.bo.UserBO;
 import com.sketchuling.user.entity.UserEntity;
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class UserRestController {
 
     private final UserBO userBO;
+    private final CategoryBO categoryBO;
 
     @Autowired
     private Environment env;
@@ -67,15 +69,19 @@ public class UserRestController {
         if(user != null){
             result.put("code", 200);
             result.put("result", "성공");
-            session.setAttribute("userLoginId", user.getLoginId());
-            session.setAttribute("userId", user.getId());
-            session.setAttribute("userName", user.getName());
-            session.setAttribute("profileImagePath", user.getProfileImagePath());
-            session.setAttribute("subscriptionDue", user.getSubscriptionDue());
+            setSession(session, user);
         } else{
             result.put("error_message", "아이디와 비밀번호를 확인해주세요.");
         }
         return result;
     }
 
+    public void setSession(HttpSession session, UserEntity user){
+        session.setAttribute("userLoginId", user.getLoginId());
+        session.setAttribute("userId", user.getId());
+        session.setAttribute("userName", user.getName());
+        session.setAttribute("profileImagePath", user.getProfileImagePath());
+        session.setAttribute("subscriptionDue", user.getSubscriptionDue());
+        session.setAttribute("categoryColorList", categoryBO.categoryColorList());
+    }
 }

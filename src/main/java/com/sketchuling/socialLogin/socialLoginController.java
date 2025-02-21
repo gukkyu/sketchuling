@@ -1,7 +1,9 @@
 package com.sketchuling.socialLogin;
 
+import com.sketchuling.category.bo.CategoryBO;
 import com.sketchuling.socialLogin.dto.GoogleInfoResponse;
 import com.sketchuling.socialLogin.dto.GoogleResponse;
+import com.sketchuling.user.UserRestController;
 import com.sketchuling.user.bo.UserBO;
 import com.sketchuling.user.entity.UserEntity;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +28,10 @@ public class SocialLoginController {
     private Environment env;
 
     private final UserBO userBO;
+
+    private final CategoryBO categoryBO;
+
+    private final UserRestController userRestController;
 
     @GetMapping("/user/sign-in/google")
     public String signInGoogle(@RequestParam("code") String authCode,
@@ -79,11 +85,7 @@ public class SocialLoginController {
             }
 
             // 세션에 사용자 정보 저장
-            session.setAttribute("userLoginId", user.getLoginId());
-            session.setAttribute("userId", user.getId());
-            session.setAttribute("userName", user.getName());
-            session.setAttribute("profileImagePath", user.getProfileImagePath());
-            session.setAttribute("subscriptionDue", user.getSubscriptionDue());
+            userRestController.setSession(session, user);
 
             // 로그인 후 메인 페이지로 리디렉션
             return "redirect:/main";  // 로그인 후 이동할 페이지 URL을 설정

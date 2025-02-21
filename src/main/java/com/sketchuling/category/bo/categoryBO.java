@@ -21,7 +21,7 @@ public class CategoryBO {
         return categoryRepository.findAllByUserId(userId);
     }
 
-    public List<String> getCategoryColorListByUserId(int userId) {
+    public List<String> categoryColorList(){
         List<String> colorList = new ArrayList<>();
         colorList.add("#FF0000");
         colorList.add("#FF7F00");
@@ -41,6 +41,11 @@ public class CategoryBO {
         colorList.add("#FF69B4");
         colorList.add("#7FFF00");
         colorList.add("#00CED1");
+
+        return colorList;
+    }
+
+    public List<String> getCategoryColorListByUserId(int userId, List<String> colorList) {
 
         List<CategoryEntity> userCategoryList = getCategoryListByUserId(userId);
         if(userCategoryList.isEmpty()) {
@@ -69,4 +74,5 @@ public class CategoryBO {
 
         return result;
     }
+
 }
