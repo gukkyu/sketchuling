@@ -93,6 +93,23 @@ header{
     background-color: #282828;
     color: white;
 }
+#addingBox{
+    border-radius: 25px;
+    background-color: white;
+}
+.addingBtn{
+    border-radius: 25px;
+}
+.addingBtn:hover{
+    border-radius: 25px;
+    background-color: #007bff;
+    color: white
+}
+.selectedBtn{
+    border-radius: 25px;
+    background-color: #007bff;
+    color: white
+}
 #todoListWeek{
     border-radius: 15px;
     background-color: #282828;

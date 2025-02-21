@@ -27,6 +27,8 @@ public class CategoryEntity {
 
     private String name;
 
+    private String color;
+
     @CreationTimestamp
     @Column(name = "createdAt")
     private LocalDateTime createdAt;

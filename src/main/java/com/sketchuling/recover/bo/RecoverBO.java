@@ -65,6 +65,6 @@ public class RecoverBO {
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteCode(){
         LocalDate date = LocalDate.now().minusDays(1);
-        recoverRepository.deleteByCreatedAt(date);
+            recoverRepository.deleteByCreatedAt(date);
     }
 }

@@ -66,6 +66,77 @@
     <div id="addBtn" class="d-flex justify-content-center align-items-center">일정 추가</div>
   </section>
   <script>
+    $(function(){
+      $(document).on("click", ".colorList", function() {
+        let selectedColor = $(this).attr("data-color"); // 클릭한 div의 data-color 값 가져오기
+
+        // 기존에 추가된 div가 있으면 업데이트, 없으면 생성
+        if ($("#selectedColor").length) {
+          $("#selectedColor").css("background-color", selectedColor);
+        } else {
+          let newDiv = `<div id="selectedColor" class="category-color"
+                                style="background-color: ${selectedColor}; width: 50px; height: 50px;">
+                              </div>`;
+          $("#selectedColorContainer").append(newDiv);
+        }
+
+        $("#addCategory").removeClass("d-none");
+        $(document).on("click", "#addCategory", function() {
+          let categoryName = $("#categoryName").val().trim();
+          if(!categoryName){
+            alert("이름을 입력하세요.");
+            return;
+          }
+          $.ajax({
+            type:"POST",
+            url:"/main/addCategory",
+            data:{"name": categoryName, "color": selectedColor},
+            success: function(data){
+              if(data.code == 200){
+                alert(categoryName + " 카테고리가 추가되었습니다.");
+                location.reload();
+              }
+            }
+          });
+        });
+      });
+
+      $("#addBtn").on("click", function(){
+        let btn = $("#addBtn");
+
+        btn.addClass("d-none").attr("style", "display: none !important;");
+        $.ajax({
+          url: "/main/specific/addSchedule",
+          success: function(data){
+            $("#todolistBox").html(data);
+          }
+        });
+      });
+      $(document).on("click", ".scheduleAdd", function(){
+        $.ajax({
+          url: "/main/specific/addSchedule",
+          success: function(data){
+            $("#todolistBox").html(data);
+          }
+        });
+      });
+      $(document).on("click", ".categoryAdd", function(){
+        $.ajax({
+          url: "/main/specific/addCategory",
+          success: function(data){
+            $("#todolistBox").html(data);
+          }
+        });
+      });
+      $(document).on("click", ".subcategoryAdd", function(){
+        $.ajax({
+          url: "/main/specific/addSubategory",
+          success: function(data){
+            $("#todolistBox").html(data);
+          }
+        });
+      });
+    });
     function updateCalendarHref(newDate) {
       let calendarBox = document.getElementById("calenderBox");
       if (calendarBox) {

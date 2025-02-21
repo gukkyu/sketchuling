@@ -1,5 +1,6 @@
 package com.sketchuling.main;
 
+import com.sketchuling.category.bo.CategoryBO;
 import com.sketchuling.main.bo.MainBO;
 import com.sketchuling.schedule.bo.ScheduleBO;
 import com.sketchuling.schedule.domain.Schedule;
@@ -25,6 +26,7 @@ public class MainController {
     private final MainBO mainBO;
     private final ScheduleBO scheduleBO;
     private final To_do_listBO to_do_listBO;
+    private final CategoryBO categoryBO;
 
     @GetMapping("")
     public String main(@RequestParam(value = "date", required = false) String dateStr, Model model, HttpSession session) {
@@ -64,5 +66,28 @@ public class MainController {
 
 
         return "main/specific";
+    }
+
+    @GetMapping("/specific/addSchedule")
+    public String specificAddSchedule(HttpSession session) {
+        if(categoryBO.getCategoryListByUserId((int)session.getAttribute("userId")).size() == 0) {
+            return "redirect:/main/specific/addCategory";
+        }
+        return "main/addSchedule";
+    }
+
+    @GetMapping("/specific/addCategory")
+    public String specificAddCategory(HttpSession session, Model model) {
+        List<String> colorList = categoryBO.getCategoryColorListByUserId((int)session.getAttribute("userId"));
+        model.addAttribute("colorList", colorList);
+        return "main/addCategory";
+    }
+
+    @GetMapping("/specific/addSubcategory")
+    public String specificAddSubCategory(HttpSession session) {
+        if(categoryBO.getCategoryListByUserId((int)session.getAttribute("userId")).size() == 0) {
+            return "redirect:/main/specific/addCategory";
+        }
+        return "main/addSubcategory";
     }
 }
