@@ -34,7 +34,7 @@ public class UserController {
     public String signIn(Model model) {
         String googleClientId = env.getProperty("google.client.id");
         String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-                + "&redirect_uri=http://localhost/user/sign-in/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
+                + "&redirect_uri=http://ec2-13-125-246-65.ap-northeast-2.compute.amazonaws.com:8080/user/sign-in/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
         model.addAttribute("requestUrl", reqUrl);
         return "user/sign-in";
     }
