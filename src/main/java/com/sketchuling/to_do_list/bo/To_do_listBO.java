@@ -131,4 +131,9 @@ public class To_do_listBO {
     public int updateCheckByTodolistId(int id, boolean isChecked){
         return to_do_listMapper.updateCheckByTodolistId(id, isChecked);
     }
+
+    public int addTodolist(int categoryId, Integer subcategoryId, String todolist){
+        boolean isChecked = false;
+        return to_do_listMapper.insertTodolist(categoryId, subcategoryId, todolist, isChecked);
+    }
 }

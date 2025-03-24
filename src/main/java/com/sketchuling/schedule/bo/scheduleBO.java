@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +38,13 @@ public class ScheduleBO {
 
     public List<Schedule> getDayScheduleList(int userId, String dateStr) {
         return scheduleMapper.selectScheduleListByUserIdAndDate(userId, dateStr);
+    }
+
+    public int addSchedule(int userId, int categoryId, String startTime, String endTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 HH:mm:ss");
+        LocalDateTime startDateTime = LocalDateTime.parse(startTime, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(endTime, formatter);
+        return scheduleMapper.insertSchedule(userId, categoryId, startDateTime, endDateTime);
     }
 
 }

@@ -8,22 +8,96 @@
         </div>
         <div class="addingCategory">
             <div class="m-2">
-                <div class="font-weight-bold mb-3">카테고리 이름</div>
-                <input type="text" class="form-control mb-3" placeholder="이름을 입력하세요.">
-                <div class="font-weight-bold mb-3">카테고리 색깔</div>
-            </div>
-            <div class="m-2">
                 <div class="font-weight-bold mb-3">카테고리 선택</div>
-                <div class="mb-3">
-                    <div class="d-flex align-items-center">
-                        <div class="category-color"></div>
-                        <div class="ml-3">대충 이름</div>
-                        <button class="ml-5 btn btn-primary">선택</button>
+                <div class="mb-3 d-flex flex-wrap">
+                    <div class="categoryList d-flex align-items-center p-3 border mr-3 mb-3" th:each="category : ${categoryList}">
+                        <div class="category-color"
+                             th:style="'background-color:' + ${category.color}"></div>
+                        <div class="ml-3" th:text="${category.name}">대충 이름</div>
+                        <button th:data-id="${category.id}" class="subcategoryBtn ml-5 btn btn-primary">선택</button>
                     </div>
                 </div>
-                <div class="font-weight-bold mb-3">서브 카테고리 이름</div>
-                <input type="text" class="form-control mb-3" placeholder="이름을 입력하세요.">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="font-weight-bold mr-3">선택된 카테고리</div>
+                    <div id="selectedCategory"></div>
+                    <div id="categoryName"></div>
+                </div>
+                <div class="font-weight-bold mb-3">일정 예정 시간</div>
+                <div class="d-flex">
+                    <div class="d-flex col-5 align-items-center p-0">
+                        <input type="text" class="form-control" id="startTimePicker" placeholder="0000년 00월 00일 00:00:00">
+                        <span>~</span>
+                        <input type="text" class="form-control" id="endTimePicker" placeholder="0000년 00월 00일 00:00:00">
+                    </div>
+                    <button id="next" class="btn btn-primary ml-2">다음</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(function(){
+        $("#next").on("click", function(){
+
+            let categoryId = $(".subcategoryBtn.btn-success").attr("data-id");
+
+            let startTime = $("#startTimePicker").val();
+            let endTime = $("#endTimePicker").val();
+
+            if (!categoryId) {
+                alert("카테고리를 선택하세요.");
+                return;
+            }
+            if (!startTime || !endTime) {
+                alert("일정 시간을 설정하세요.");
+                return;
+            }
+
+            $.ajax({
+                url: "/main/specific/addTodolist",
+                data:{"categoryId":categoryId, "startTime":startTime, "endTime":endTime},
+                success: function(data){
+                    $("#addBox").html(data);
+                }
+            });
+        });
+    });
+    $(document).ready(function () {
+        let today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const commonOptions = {
+            enableTime: true,
+            locale: {
+                firstDayOfWeek: 1,
+                months: {
+                    shorthand: [...Array(12)].map((_, i) => `${i + 1}월`),
+                    longhand: [...Array(12)].map((_, i) => `${i + 1}월`)
+                }
+            },
+            noCalendar: false,
+            dateFormat: "Y년 m월 d일 H:i:00", // 사용자에게 보이는 형식 (한글 포함)
+            time_24hr: true,
+            minuteIncrement: 5,
+            defaultDate: today,
+            allowInput: true,
+            onClose: function(selectedDates, dateStr, instance) {
+                if (selectedDates.length > 0) {
+                    let formattedDate = formatToLocalDateTime(selectedDates[0]); // selectedDates[0] 사용
+                    $(instance.input).data("formatted-value", formattedDate); // 서버 전송용 데이터 저장
+                }
+            }
+        };
+
+        let startPicker = flatpickr("#startTimePicker", {
+            ...commonOptions,
+            onChange: function(selectedDates) {
+                console.log("시작 시간 선택:", selectedDates[0]);
+                endPicker.set("minDate", selectedDates[0]);
+            }
+        });
+
+        let endPicker = flatpickr("#endTimePicker", commonOptions);
+    });
+
+</script>

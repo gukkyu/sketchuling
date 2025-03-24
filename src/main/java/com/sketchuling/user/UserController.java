@@ -49,4 +49,8 @@ public class UserController {
         return "user/recover";
     }
 
+    @GetMapping("/info")
+    public String info(HttpSession session) {
+        return "main/info";
+    }
 }

@@ -5,6 +5,8 @@ import com.sketchuling.category.entity.CategoryEntity;
 import com.sketchuling.main.bo.MainBO;
 import com.sketchuling.schedule.bo.ScheduleBO;
 import com.sketchuling.schedule.domain.Schedule;
+import com.sketchuling.subcategory.bo.SubcategoryBO;
+import com.sketchuling.subcategory.entity.SubcategoryEntity;
 import com.sketchuling.to_do_list.bo.To_do_listBO;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -28,6 +31,7 @@ public class MainController {
     private final ScheduleBO scheduleBO;
     private final To_do_listBO to_do_listBO;
     private final CategoryBO categoryBO;
+    private final SubcategoryBO subcategoryBO;
 
     @GetMapping("")
     public String main(@RequestParam(value = "date", required = false) String dateStr, Model model, HttpSession session) {
@@ -70,11 +74,23 @@ public class MainController {
     }
 
     @GetMapping("/specific/addSchedule")
-    public String specificAddSchedule(HttpSession session) {
-        if(categoryBO.getCategoryListByUserId((int)session.getAttribute("userId")).size() == 0) {
+    public String specificAddSchedule(HttpSession session, Model model) {
+        List<CategoryEntity> categoryList = categoryBO.getCategoryListByUserId((int)session.getAttribute("userId"));
+        if(categoryBO.getCategoryListByUserId((int)session.getAttribute("userId")).isEmpty()) {
             return "redirect:/main/specific/addCategory";
         }
+        model.addAttribute("categoryList", categoryList);
         return "main/addSchedule";
+    }
+    @GetMapping("/specific/addTodolist")
+    public String specificAddTodolist(HttpSession session, Model model, int categoryId, String startTime, String endTime) {
+        List<SubcategoryEntity> subcategoryList = subcategoryBO.getSubcategoryListByCategoryId(categoryId);
+        CategoryEntity category = categoryBO.getCategoryById(categoryId);
+        model.addAttribute("category", category);
+        model.addAttribute("subcategoryList", subcategoryList);
+        model.addAttribute("startTime", startTime);
+        model.addAttribute("endTime", endTime);
+        return "main/addTodolist";
     }
 
     @GetMapping("/specific/addCategory")

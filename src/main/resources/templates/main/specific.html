@@ -66,14 +66,41 @@
     <div id="addBtn" class="d-flex justify-content-center align-items-center">일정 추가</div>
   </section>
   <script>
-
     $(function(){
+      $(".todoCheck").on("click", function() {
+        let id = $(this).data("id");
+        let isChecked = $(this).find('input[type="checkbox"]').prop("checked");
+
+        $.ajax({
+          url: '/todolist/checking',
+          type: 'PATCH',
+          contentType: 'application/x-www-form-urlencoded',
+          data: {
+            id: id,
+            isChecked: !isChecked
+          },
+          success: function(data) {
+            if(data.code === 200){
+              location.reload();
+            } else {
+              alert('업데이트 실패: ' + data.result);
+            }
+          },
+          error: function(e) {
+
+          }
+        });
+      });
+
       $(document).on("click", ".subcategoryBtn", function() {
         $("#addSubcategory").removeClass("d-none");
         let categoryDiv = $(this).closest(".d-flex.align-items-center"); // 클릭한 버튼의 부모 div
         let selectedColor = categoryDiv.find(".category-color").css("background-color"); // 배경색 가져오기
         let categoryName = categoryDiv.find("div.ml-3").text().trim(); // 카테고리명 가져오기
         let categoryId = $(this).attr("data-id");
+        if(categoryId == 0){
+          let categoryIdDefault = $("#categoryId").attr("data-id");
+        }
         // 선택된 카테고리 색상 적용
         $("#selectedCategory").css({
           "background-color": selectedColor,

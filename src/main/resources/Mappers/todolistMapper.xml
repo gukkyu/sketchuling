@@ -66,5 +66,26 @@
         WHERE
             `id` = #{id}
     </update>
+
+    <insert id="insertTodolist" parameterType="map">
+        INSERT INTO `to_do_list`
+        (
+            `categoryId`,
+            `subcategoryId`,
+            `todolist`,
+            `isChecked`,
+            `createdAt`,
+            `updatedAt`
+        )
+        VALUES
+        (
+            #{categoryId},
+            #{subcategoryId},
+            #{todolist},
+            #{isChecked},
+            NOW(),
+            NOW()
+        )
+    </insert>
 </mapper>
 

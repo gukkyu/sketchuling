@@ -13,4 +13,25 @@
         AND
             DATE(`startTime`) = #{date}
     </select>
+
+    <insert id="insertSchedule" parameterType="map">
+        INSERT INTO `schedule`
+        (
+            `userId`,
+            `categoryId`,
+            `startTime`,
+            `endTime`,
+            `createdAt`,
+            `updatedAt`
+        )
+        VALUES
+        (
+            #{userId},
+            #{categoryId},
+            #{startTime},
+            #{endTime},
+            NOW(),
+            NOW()
+        )
+    </insert>
 </mapper>

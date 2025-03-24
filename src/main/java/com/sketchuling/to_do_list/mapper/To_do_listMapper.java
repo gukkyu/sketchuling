@@ -24,4 +24,11 @@ public interface To_do_listMapper {
               @Param("id") int id,
               @Param("isChecked") boolean isChecked
     );
+
+    public int insertTodolist(
+            @Param("categoryId") int categoryId,
+            @Param("subcategoryId") Integer subcategoryId,
+            @Param("todolist") String todolist,
+            @Param("isChecked") boolean isChecked
+            );
 }

@@ -75,4 +75,8 @@ public class CategoryBO {
         return result;
     }
 
+    public CategoryEntity getCategoryById(int categoryId) {
+        return categoryRepository.findById(categoryId).get();
+    }
+
 }

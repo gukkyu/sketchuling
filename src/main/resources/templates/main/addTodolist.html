@@ -1,0 +1,106 @@
+<div id="addBox">
+    <div id="todoListWeek" class="font-weight-bold my-3 p-3 category">추가 페이지</div>
+    <div id="addingBox" class="my-3 p-3">
+        <div class="d-flex">
+            <div class="m-2 p-3 addingBtn scheduleAdd">일정 추가</div>
+            <div class="m-2 p-3 addingBtn categoryAdd">카테고리 추가</div>
+            <div class="m-2 p-3 addingBtn subcategoryAdd">서브 카테고리 추가</div>
+        </div>
+        <div class="addingCategory">
+            <div class="m-2">
+                <button id="backBtn" class="btn btn-primary mb-3">이전 페이지</button>
+                <div class="font-weight-bold mb-3">선택한 카테고리</div>
+                <div class="mb-3 d-flex flex-wrap">
+                    <div class="categoryList d-flex align-items-center p-3 border mr-3 mb-3" th:each="category : ${category}">
+                        <div class="category-color"
+                             th:style="'background-color:' + ${category.color}"></div>
+                        <div class="ml-3" th:text="${category.name}">대충 이름</div>
+                        <button th:data-id="${category.id}" id="categoryId" class="subcategoryBtn ml-5 btn btn-primary d-none">선택</button>
+                    </div>
+                </div>
+                <div class="font-weight-bold mb-3">선택한 일정: <span id="startTime" th:data-starttime="${startTime}" th:text="${startTime}"></span> ~ <span id="endTime" th:data-endtime="${endTime}"  th:text="${endTime}"></span></div>
+                <div class="font-weight-bold mb-3">서브 카테고리 선택</div>
+                <div class="mb-3 d-flex flex-wrap">
+                    <div class="categoryList d-flex align-items-center p-3 border mr-3 mb-3" th:each="subcategory: ${subcategoryList}">
+                        <div class="ml-3" th:text="${subcategory.name}">대충 이름</div>
+                        <button th:data-id="${subcategory.id}" class="tdlBtn ml-5 btn btn-primary">선택</button>
+                    </div>
+                    <div class="categoryList d-flex align-items-center p-3 border mr-3 mb-3">
+                        선택 안함
+                        <button th:data-id="0" class="tdlBtn ml-5 btn btn-primary">선택</button>
+                    </div>
+                </div>
+                <div class="font-weight-bold mb-3"><span class="mr-3">할 일 추가</span> <button id="no" class="btn btn-danger">없음</button><button id="yes" class="btn btn-success d-none">있음</button></div>
+                <textarea id="textbox" class="form-control col-8" rows="3"></textarea>
+                <button id="submitBtn" class="mt-5 btn-primary btn">추가하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $("#no").on("click", function(){
+            $(this).addClass("d-none");
+            $("#yes").removeClass("d-none");
+            $("#textbox").addClass("d-none");
+        });
+        $("#yes").on("click", function(){
+            $("#no").removeClass("d-none");
+            $("#yes").addClass("d-none");
+            $("#textbox").removeClass("d-none");
+        });
+
+        $("#backBtn").on("click", function(){
+            $.ajax({
+                url: "/main/specific/addSchedule",
+                success: function(data){
+                    $("#addBox").html(data);
+                }
+            });
+        });
+
+        $(document).on("click", ".tdlBtn", function() {
+            $(".tdlBtn").removeClass("btn-success").addClass("btn-primary").text("선택");
+            $(this).removeClass("btn-primary").addClass("btn-success").text("선택됨");
+        });
+
+        $("#submitBtn").on("click", function () {
+            let categoryId = $("#categoryId").attr("data-id");
+            let subcategoryId = $(".tdlBtn.btn-success").attr("data-id");
+            let startTime = $("#startTime").attr("data-starttime");
+            let endTime = $("#endTime").attr("data-endtime");
+            let taskText = $("#textbox").val().trim();
+
+            if (!subcategoryId) {
+                alert("서브 카테고리를 선택하세요.");
+                return;
+            }
+            if (!taskText && $("#yes").hasClass("d-none")) {
+                alert("할 일을 입력하세요.");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/schedule/add",
+                data: {
+                    "categoryId": categoryId,
+                    "subcategoryId": subcategoryId,
+                    "startTime": startTime,
+                    "endTime": endTime,
+                    "todolist": taskText
+                },
+                success: function (data) {
+                    if(data.code == 200){
+                        alert("추가되었습니다.");
+                        location.href = "/main";
+                    } else{
+                        alert(data.error_message);
+                        location.href = "/main";
+                    }
+                }
+            });
+        });
+    });
+
+</script>
