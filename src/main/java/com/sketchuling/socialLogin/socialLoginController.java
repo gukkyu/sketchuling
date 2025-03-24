@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Controller
 @AllArgsConstructor
-public class SocialLoginController {
+public class socialLoginController {
 
     @Autowired
     private Environment env;
